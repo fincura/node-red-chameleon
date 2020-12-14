@@ -1,0 +1,24 @@
+#palette-fincura .palette_label {
+	color: inherit;
+}
+
+
+#palette-fincura_filters .palette_label {
+	color: inherit;
+}
+
+#palette-fincura_generators .palette_label {
+	color: inherit;
+}
+
+#palette-fincura_utils .palette_label {
+	color: inherit;
+}
+
+#palette-fincura_files .palette_label {
+	color: inherit;
+}
+
+.fincura_label {
+	fill: inherit;
+}
