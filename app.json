@@ -7,9 +7,6 @@
   "logo": "http://nodered.org/node-red.png",
   "success_url": "/",
   "env": {
-    "HEROKU_APP_NAME": {
-      "required": true
-    },
     "NODE_RED_PASSWORD": {
       "description": "The password to secure the editor.",
       "value": ""
