@@ -3,13 +3,14 @@
     "version": "0.1.0",
     "dependencies": {
         "feedparser": "~0.19.2",
-        "pg": "^8.3.0",
         "nano": "~5.11.0",
         "node-red": "1.2.6",
         "node-red-contrib-fincura": "^0.2.2",
         "node-red-contrib-http-event-collector": "^0.1.7",
+        "node-red-contrib-httpauth": "^1.0.12",
         "node-red-contrib-ngrok": "^1.1.1",
         "node-red-node-twilio": "^0.1.0",
+        "pg": "^8.3.0",
         "redis": "2.6.1",
         "when": "~3.x"
     },
