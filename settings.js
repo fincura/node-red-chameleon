@@ -38,9 +38,6 @@ var settings = module.exports = {
     // post-deploy are restored after a restage
     autoInstallModules: true,
 
-    // Move the admin UI
-    httpAdminRoot: '/red',
-
     // Enable audit logging to record changes to the app functionality
     logging: {
       console: {
@@ -50,9 +47,8 @@ var settings = module.exports = {
       }
     },
  
-    // You can protect the user interface with a userid and password by using the following property
-    // the password must be an md5 hash  eg.. 5f4dcc3b5aa765d61d8327deb882cf99 ('password')
-    //httpAdminAuth: {user:"user",pass:"5f4dcc3b5aa765d61d8327deb882cf99"},
+    // Move the admin UI
+    httpAdminRoot: '/admin',
 
     // Serve up the welcome page
     httpStatic: path.join(__dirname,"public"),
@@ -84,39 +80,15 @@ var settings = module.exports = {
         deployButton: {
             type:"simple",
             label:"Deploy"
-            //icon: "/absolute/path/to/deploy/button/image" // or null to remove image
-        }//,
-        // menu: { // Hide unwanted menu items by id. see packages/node_modules/@node-red/editor-client/src/js/red.js:loadEditor for complete list
-        //     "menu-item-import-library": false,
-        //     "menu-item-export-library": false,
-        //     "menu-item-keyboard-shortcuts": false,
-        //     "menu-item-help": {
-        //         label: "Alternative Help Link Text",
-        //         url: "http://example.com"
-        //     }
-        // },
-        // userMenu: false, // Hide the user-menu even if adminAuth is enabled
-        // login: {
-        //     image: "/absolute/path/to/login/page/big/image" // a 256x256 image
-        // },
-        // logout: {
-        //     redirect: "http://example.com"
-        // },
-        // palette: {
-        //     editable: true, // Enable/disable the Palette Manager
-        //     catalogues: [   // Alternative palette manager catalogues
-        //         //'https://catalogue.nodered.org/catalogue.json'
-        //     ],
-        //     theme: [ // Override node colours - rules test against category/type by RegExp.
-        //         //{ category: ".*", type: ".*", color: "#f0f" }
-        //     ]
-        // },
-        // projects: {
-        //     enabled: false // Enable the projects feature
-        // }
-    },
-}
+        },
+        login: {
+            image: "/images/fincura_square.png" 
+        }
+    }
+};
 
+// note:  if some error message about reading settings happens, it probably
+// means there is a variable not correctly set here.  double check your environment variables
 if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
     settings.adminAuth = {
         type: "credentials",
@@ -136,7 +108,44 @@ if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
             }
         }
     }
-}
+// AWS Cognito OAuth2
+} else if (process.env.NODE_RED_AUTH_ADMIN_COGNITO &&
+        process.env.NODE_RED_AUTH_ADMIN_COGNITO_GROUP &&
+        process.env.NODE_RED_COGNITO_LABEL &&
+        process.env.NODE_RED_COGNITO_REGION &&
+        process.env.NODE_RED_COGNITO_CALLBACK &&
+        process.env.NODE_RED_COGNITO_CLIENT_DOMAIN &&
+        process.env.NODE_RED_COGNITO_CLIENT_ID &&
+        process.env.NODE_RED_COGNITO_CLIENT_SECRET) {
+    settings.adminAuth = {
+        type: "strategy",
+        strategy: {
+            name: "cognito-oauth2",
+            label: process.env.NODE_RED_COGNITO_LABEL,
+            icon: "fa-user",
+            strategy: require('./authStrategy.js'),
+            options: {
+                adminGroups: process.env.NODE_RED_AUTH_ADMIN_COGNITO_GROUP,
+                callbackURL: process.env.NODE_RED_COGNITO_CALLBACK,
+                clientDomain: process.env.NODE_RED_COGNITO_CLIENT_DOMAIN,
+                clientID: process.env.NODE_RED_COGNITO_CLIENT_ID,
+                clientSecret: process.env.NODE_RED_COGNITO_CLIENT_SECRET,
+                region: process.env.NODE_RED_COGNITO_REGION,
+                scope: ['email', 'openid', 'profile'],
+                verify: function(token, tokenSecret, profile, done) {
+                    if (!profile.isAdmin) {
+	                    throw Error("Access Denied");
+                    }
+                    done(null, profile);
+                }
+            }
+        },
+        users: function(user) {
+	    console.log(user);
+            return Promise.resolve({ username: user, permissions: "*" });
+        }
+    };
+};
 
 settings.pgAppname = 'nodered';
 pgutil.initPG();

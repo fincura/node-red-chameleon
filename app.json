@@ -18,6 +18,38 @@
     "NODE_RED_BASE_URL": {
       "description": "Base url to this application e.g.  https://hostname.tld:5000",
       "value": ""
+    },
+    "NODE_RED_AUTH_ADMIN_COGNITO": {
+      "description": "Whether or not to use OAuth from Cognito for logging into the editor.",
+      "value": ""
+    },
+    "NODE_RED_AUTH_ADMIN_COGNITO_GROUP": {
+      "description": "The Cognito group that is granted access to the editor.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_LABEL": {
+      "description": "The phrase to use to indicate the login action. For example: Login with Cognito.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_REGION": {
+      "description": "Which AWS region to connect to Cognito in.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_CALLBACK": {
+      "description": "The full callback URL to relay users to after authenticating.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_CLIENT_DOMAIN": {
+      "description": "Which Cognito user pool URL to use for user authentication.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_CLIENT_ID": {
+      "description": "The application/client ID to use to identify this app to Cognito.",
+      "value": ""
+    },
+    "NODE_RED_COGNITO_CLIENT_SECRET": {
+      "description": "The application/client secret to use with Cognito when generating user tokens.",
+      "value": ""
     }
   },
   "addons": [     

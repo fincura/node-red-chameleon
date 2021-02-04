@@ -7,7 +7,11 @@ let pool
 const initPG = () => {
   const pgUrl = process.env.DATABASE_URL
   console.log('pgUrl', pgUrl)
-  pool = new pg.Pool({ connectionString: pgUrl, ssl: { rejectUnauthorized: false } })
+  if (process.env.DATABASE_ALLOW_INSECURE_CONNECTIONS === "true") {
+      pool = new pg.Pool({ connectionString: pgUrl }) // use for non-ssl pg connections in local/testing envs
+  } else {
+      pool = new pg.Pool({ connectionString: pgUrl, ssl: { rejectUnauthorized: false } })
+  }
   return pool
 }
 

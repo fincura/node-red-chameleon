@@ -1,0 +1,30 @@
+# IMPORTANT
+# This file is intended for use only as an example and starting point. Please be sure to review
+# and update appropriately for your needs.
+# if nothing else, please be sure to change the postgres password
+
+services:
+    node-red-chameleon:
+        build: .
+        environment:
+            DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-aReallyBadDefault}@postgres/postgres
+            DATABASE_ALLOW_INSECURE_CONNECTIONS: "true"   # for testing / local-dev only
+            NODE_RED_BASE_URL: ${NODE_RED_BASE_URL}
+            NODE_RED_AUTH_ADMIN_COGNITO: ${NODE_RED_AUTH_ADMIN_COGNITO}
+            NODE_RED_AUTH_ADMIN_COGNITO_GROUP: ${NODE_RED_AUTH_ADMIN_COGNITO_GROUP}
+            NODE_RED_COGNITO_LABEL: ${NODE_RED_COGNITO_LABEL}
+            NODE_RED_COGNITO_REGION: ${NODE_RED_COGNITO_REGION}
+            NODE_RED_COGNITO_CALLBACK: ${NODE_RED_COGNITO_CALLBACK}
+            NODE_RED_COGNITO_CLIENT_DOMAIN: ${NODE_RED_COGNITO_CLIENT_DOMAIN}
+            NODE_RED_COGNITO_CLIENT_ID: ${NODE_RED_COGNITO_CLIENT_ID}
+            NODE_RED_COGNITO_CLIENT_SECRET: ${NODE_RED_COGNITO_CLIENT_SECRET}
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./:/src
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aReallyBadDefault}
+
+
